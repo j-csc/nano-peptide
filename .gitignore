@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+*.o
+*.wasm
+*.js.map
+.DS_Store
+.env
+.env.local
+*.log
