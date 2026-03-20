@@ -119,16 +119,16 @@ export function generatePDB(
       CA = prevCA
       C = prevC
     } else {
-      // Place N from previous C
-      N = placeAtom(prevCA, prevC, prevC, C_N, CA_C_N, psi)
-      // Place CA from N
-      CA = placeAtom(prevC, N, N, N_CA, C_N_CA, omega)
-      // Place C from CA
-      C = placeAtom(N, CA, CA, CA_C, N_CA_C, phi)
+      // Place N from previous residue's CA -> C bond with psi dihedral
+      N = placeAtom(prevN, prevCA, prevC, C_N, CA_C_N, psi)
+      // Place CA from previous C -> N bond with omega dihedral
+      CA = placeAtom(prevCA, prevC, N, N_CA, C_N_CA, omega)
+      // Place C from N -> CA bond with phi dihedral
+      C = placeAtom(prevC, N, CA, CA_C, N_CA_C, phi)
     }
 
-    // Place O
-    O = placeAtom(CA, C, C, C_O, CA_C_O, Math.PI)
+    // Place O from N -> CA -> C with pi dihedral (opposite side from next N)
+    O = placeAtom(N, CA, C, C_O, CA_C_O, Math.PI)
 
     atoms.push({ name: 'N', resName, resSeq, x: N[0], y: N[1], z: N[2], element: 'N' })
     atoms.push({ name: 'CA', resName, resSeq, x: CA[0], y: CA[1], z: CA[2], element: 'C' })
