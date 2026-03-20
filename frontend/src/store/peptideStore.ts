@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { computeProperties, type AminoAcid, AMINO_ACIDS } from '../lib/aminoAcids'
+import { screenAgainstTargets, type DockingResult } from '../lib/receptorDocking'
 
 export type ViewMode = 'cartoon' | 'ball-and-stick' | 'surface' | 'spacefill'
 export type ColorScheme = 'residue' | 'hydrophobicity' | 'charge' | 'secondary'
@@ -24,6 +25,9 @@ export interface PeptideState {
   // Computed
   properties: PeptideProperties | null
   residueInfo: AminoAcid[]
+
+  // Docking results
+  dockingResults: DockingResult[]
 
   // Viewer settings
   viewMode: ViewMode
@@ -54,11 +58,13 @@ export const usePeptideStore = create<PeptideState>((set) => ({
     const clean = seq.toUpperCase().replace(/[^ACDEFGHIKLMNPQRSTVWY]/g, '')
     const props = computeProperties(clean)
     const residueInfo = clean.split('').map(c => AMINO_ACIDS[c]).filter(Boolean)
-    set({ sequence: clean, properties: props, residueInfo })
+    const dockingResults = clean.length >= 3 ? screenAgainstTargets(clean) : []
+    set({ sequence: clean, properties: props, residueInfo, dockingResults })
   },
 
   properties: null,
   residueInfo: [],
+  dockingResults: [],
 
   viewMode: 'cartoon',
   setViewMode: (mode) => set({ viewMode: mode }),

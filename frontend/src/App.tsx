@@ -4,6 +4,7 @@ import { MolstarViewer } from './components/MolstarViewer'
 import { StructurePanel } from './components/StructurePanel'
 import { PropertyPanel } from './components/PropertyPanel'
 import { RamachandranPlot } from './components/RamachandranPlot'
+import { DockingPanel } from './components/DockingPanel'
 import { ViewerControls } from './components/ViewerControls'
 import { usePeptideStore } from './store/peptideStore'
 import { generatePDB, type SecondaryStructure } from './lib/pdbGenerator'
@@ -46,8 +47,19 @@ export default function App() {
           </div>
 
           {/* Properties */}
-          <div className="flex-1 min-h-0 overflow-hidden">
+          <div className="shrink-0 max-h-[45%] overflow-hidden" style={{ borderBottom: '1px solid var(--border-color)' }}>
             <PropertyPanel />
+          </div>
+
+          {/* Target Receptor Docking */}
+          <div className="flex-1 min-h-0 flex flex-col">
+            <div className="flex items-center gap-2 px-3 py-1.5 shrink-0" style={{ borderBottom: '1px solid var(--border-color)' }}>
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-red)' }} />
+              <span className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>Target Screening</span>
+            </div>
+            <div className="flex-1 min-h-0">
+              <DockingPanel />
+            </div>
           </div>
         </aside>
 
